@@ -1,34 +1,71 @@
 {
-	"name": "maispace/better-news",
-	"description": "Made from the maispace/template-typo3-extension",
-	"type": "typo3-cms-extension",
-	"homepage": "https://www.maispace.de",
-	"license": ["GPL-2.0-or-later"],
-	"keywords": ["TYPO3 CMS"],
-	"version": "1.0.0",
-	"minimum-stability": "dev",
-	"prefer-stable": true,
-	"config": {
-		"sort-packages": false,
-		"platform": {
-			"php": "8.2"
-		}
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "better_news"
-		}
-	},
-	"require": {
-		"php": "^8.2",
-		"typo3/cms-core": "^12.4 || ^13"
-	},
-	"autoload": {
-		"psr-4": {
-			"MaiSpace\\BetterNews\\": "Classes/"
-		}
-	},
-	"replace": {
-		"typo3-ter/my_ext": "*"
-	}
+  "name": "maispace/better-news",
+  "description": "Enhanced news rendering and configuration for TYPO3, built on EXT:news.",
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Maispace",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "typo3/cms-core": "^12.4 || ^13"
+  },
+  "require-dev": {
+    "armin/editorconfig-cli": "^2.1",
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "helmich/typo3-typoscript-lint": "^3.1",
+    "phpstan/phpstan": "^2.0",
+    "phpunit/phpunit": "^10.5 || ^11.0",
+    "saschaegerer/phpstan-typo3": "^2.0",
+    "typo3/testing-framework": "^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "MaiSpace\\BetterNews\\": "Classes/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MaiSpace\\BetterNews\\Tests\\": "Tests/"
+    }
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "better_news"
+    }
+  },
+  "scripts": {
+    "lint:check": [
+      "@check:editorconfig",
+      "@check:phpcs",
+      "@check:phpstan",
+      "@check:typoscript",
+      "@composer validate --strict --no-check-version --no-check-all --no-check-publish"
+    ],
+    "lint:fix": [
+      "@fix:editorconfig",
+      "@fix:phpcs",
+      "@check:phpstan",
+      "@check:typoscript"
+    ],
+    "check:editorconfig": "ec -unv -e vendor/",
+    "fix:editorconfig": "ec -unvf -e vendor/",
+    "check:phpcs": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer check --config .php-cs-fixer.php --ansi --verbose --diff",
+    "fix:phpcs": "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --config .php-cs-fixer.php --ansi",
+    "check:phpstan": "phpstan analyse --no-progress",
+    "check:phpstan:baseline": "phpstan analyse --no-progress --generate-baseline=phpstan-baseline.neon",
+    "check:typoscript": "typoscript-lint --fail-on-warnings -c typoscript-lint.yml Configuration/Sets/BetterNews/",
+    "test": "phpunit --configuration phpunit.xml.dist",
+    "test:unit": "phpunit --configuration phpunit.xml.dist --testsuite Unit"
+  },
+  "config": {
+    "allow-plugins": {
+      "typo3/cms-composer-installers": true,
+      "typo3/class-alias-loader": true
+    },
+    "sort-packages": true
+  }
 }
